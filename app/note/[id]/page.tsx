@@ -3,6 +3,7 @@ export const runtime = "edge";
 import { getNoteById } from "@/lib/firestore-rest";
 import PublicNoteClient from "./public-note-client";
 
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const note = await getNoteById(params.id);
 
