@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import ReactMarkdown from "react-markdown";
-import { notFound } from "next/navigation";
 
 export default function PublicNoteClient({ id }: { id: string }) {
   const [note, setNote] = useState<any>(null);
@@ -28,7 +27,14 @@ export default function PublicNoteClient({ id }: { id: string }) {
   }, [id]);
 
   if (loading) return null;
-  if (!note) return notFound();
+  if (!note) {
+  return (
+    <main className="min-h-screen bg-black text-white p-8">
+      <p className="text-gray-400">Note not found.</p>
+    </main>
+  );
+}
+
 
   return (
     <main className="min-h-screen bg-black text-white p-8">

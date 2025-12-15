@@ -33,27 +33,22 @@ export default function Dashboard() {
 
   // 📄 Notes listener (NO index required)
   useEffect(() => {
-    if (!user) return;
+  if (!user?.uid) return; // 👈 ADD THIS
 
-    const q = query(
-      collection(db, "notes"),
-      where("uid", "==", user.uid)
+  const q = query(
+    collection(db, "notes"),
+    where("uid", "==", user.uid)
+  );
+
+  const unsub = onSnapshot(q, (snap) => {
+    setNotes(
+      snap.docs.map((d) => ({ id: d.id, ...d.data() }))
     );
+  });
 
-    const unsub = onSnapshot(q, (snap) => {
-      console.log("SNAPSHOT SIZE:", snap.size);
-      console.log(
-        "DOCS:",
-        snap.docs.map((d) => ({ id: d.id, ...d.data() }))
-      );
+  return () => unsub();
+}, [user]);
 
-      setNotes(
-        snap.docs.map((d) => ({ id: d.id, ...d.data() }))
-      );
-    });
-
-    return () => unsub();
-  }, [user]);
 
   if (!user) return null;
 
